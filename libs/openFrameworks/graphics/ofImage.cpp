@@ -717,7 +717,7 @@ void ofImage_<PixelType>::draw(float x, float y, float w, float h){
 //------------------------------------
 template<typename PixelType>
 void ofImage_<PixelType>::draw(float x, float y, float z, float w, float h){
-	drawSubsection(x,y,z,w,h,0,0,w,h);
+	drawSubsection(x,y,z,w,h,0,0,getWidth(),getHeight());
 }
 
 //------------------------------------
@@ -883,6 +883,11 @@ void ofImage_<PixelType>::update(){
 		}
 		tex.loadData(pixels);
 	}
+	
+	width	= pixels.getWidth();
+	height	= pixels.getHeight();
+	bpp		= pixels.getBitsPerPixel();
+	type	= pixels.getImageType();
 }
 
 //------------------------------------
