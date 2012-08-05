@@ -280,7 +280,7 @@ void ofAppGlutWindow::setupOpenGL(int w, int h, int screenMode){
     	glutGameModeString(gameStr);
 
     	if (!glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
-    		ofLog(OF_LOG_ERROR,"game mode error: selected format (%s) not available \n", gameStr);
+    		ofLogError("ofAppGlutWindow") << "Game mode format " << gameStr << " is not available.";
     	}
     	// start fullscreen game mode
     	glutEnterGameMode();

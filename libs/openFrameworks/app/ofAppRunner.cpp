@@ -89,7 +89,7 @@ void ofSetupOpenGL(ofPtr<ofAppBaseWindow> windowPtr, int w, int h, int screenMod
 	if (GLEW_OK != err)
 	{
 		/* Problem: glewInit failed, something is seriously wrong. */
-		ofLog(OF_LOG_ERROR, "Error: %s\n", glewGetErrorString(err));
+		ofLogError("ofSetupOpenGL()") << "glewInit() failed with error " << glewGetErrorString(err);
 	}
 #endif
 	ofSetCurrentRenderer(ofPtr<ofBaseRenderer>(new ofGLRenderer(false)));
