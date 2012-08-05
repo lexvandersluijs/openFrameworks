@@ -235,7 +235,7 @@ void ofMesh::addTriangle(ofIndexType index1, ofIndexType index2, ofIndexType ind
 //--------------------------------------------------------------
 void ofMesh::removeVertex(int index){
   if(index >= vertices.size()){
-    ofLog(OF_LOG_ERROR,"Trying to remove vertex out of range of this mesh. Taking no action.");
+    ofLogError("ofMesh") << ("Trying to remove vertex out of range of this mesh. Taking no action.");
   }else{
     vertices.erase(vertices.begin() + index);
     bVertsChanged = true;
@@ -245,7 +245,7 @@ void ofMesh::removeVertex(int index){
 //--------------------------------------------------------------
 void ofMesh::removeNormal(int index){
   if(index >= vertices.size()){
-    ofLog(OF_LOG_ERROR,"Trying to remove normal out of range of this mesh. Taking no action.");
+    ofLogError("ofMesh") << ("Trying to remove normal out of range of this mesh. Taking no action.");
   }else{
     normals.erase(normals.begin() + index);
     bNormalsChanged = true;
@@ -255,7 +255,7 @@ void ofMesh::removeNormal(int index){
 //--------------------------------------------------------------
 void ofMesh::removeColor(int index){
   if(index >= vertices.size()){
-    ofLog(OF_LOG_ERROR,"Trying to remove color out of range of this mesh. Taking no action.");
+    ofLogError("ofMesh") << ("Trying to remove color out of range of this mesh. Taking no action.");
   }else{
     colors.erase(colors.begin() + index);
     bColorsChanged = true;
@@ -265,7 +265,7 @@ void ofMesh::removeColor(int index){
 //--------------------------------------------------------------
 void ofMesh::removeTexCoord(int index){
   if(index >= vertices.size()){
-    ofLog(OF_LOG_ERROR,"Trying to remove texCoord out of range of this mesh. Taking no action.");
+    ofLogError("ofMesh") << ("Trying to remove texCoord out of range of this mesh. Taking no action.");
   }else{
     texCoords.erase(texCoords.begin() + index);
     bTexCoordsChanged = true;
@@ -275,7 +275,7 @@ void ofMesh::removeTexCoord(int index){
 //--------------------------------------------------------------
 void ofMesh::removeIndex(int index){
   if(index >= vertices.size()){
-    ofLog(OF_LOG_ERROR,"Trying to remove index out of range of this mesh. Taking no action.");
+    ofLogError("ofMesh") << ("Trying to remove index out of range of this mesh. Taking no action.");
   }else{
     indices.erase(indices.begin() + index);
     bIndicesChanged = true;
@@ -529,7 +529,7 @@ vector<int>& ofPrimitive::getFace(int faceNum){
 //--------------------------------------------------------------
 ofVec3f ofMesh::getCentroid() const {
 	if(vertices.size() == 0) {
-		ofLogWarning() << "Called ofMesh::getCentroid() on mesh with zero vertices, returned ofPoint(0, 0, 0)";
+		ofLogWarning("ofMesh") << "Called getCentroid() on mesh with zero vertices, returning ofPoint(0, 0, 0).";
 		return ofPoint(0, 0, 0);
 	}
 
@@ -738,14 +738,14 @@ void ofMesh::load(string path){
 	line = buffer.getFirstLine();
 	lineNum++;
 	if(line!="ply"){
-		error = "wrong format, expecting 'ply'";
+		error = "Wrong format, expecting 'ply'.";
 		goto clean;
 	}
 
 	line = buffer.getNextLine();
 	lineNum++;
 	if(line!="format ascii 1.0"){
-		error = "wrong format, expecting 'format ascii 1.0'";
+		error = "Wrong format, expecting 'format ascii 1.0'.";
 		goto clean;
 	}
 
@@ -800,21 +800,21 @@ void ofMesh::load(string path){
 		}
 
 		if(state==FaceDef && line.find("property list")!=0 && line!="end_header"){
-			error = "wrong face definition";
+			error = "Wrong face definition.";
 			goto clean;
 		}
 
 		if(line=="end_header"){
 			if(data.hasColors() && colorCompsFound!=3 && colorCompsFound!=4){
-				error =  "data has color coordiantes but not correct number of components. Found " + ofToString(colorCompsFound) + " expecting 3 or 4";
+				error =  "Data has color coordinates but not correct number of components. Found " + ofToString(colorCompsFound) + ", expecting 3 or 4";
 				goto clean;
 			}
 			if(data.hasNormals() && colorCompsFound!=3 && colorCompsFound!=4){
-				error = "data has color coordiantes but not correct number of components. Found " + ofToString(colorCompsFound) + " expecting 3 or 4";
+				error = "Data has color coordinates but not correct number of components. Found " + ofToString(colorCompsFound) + ", expecting 3 or 4";
 				goto clean;
 			}
 			if(!data.hasVertices()){
-				ofLogWarning() << "mesh without vertices";
+				ofLogWarning("ofMesh") << "Loaded a mesh with no vertices.";
 			}
 			if(orderVertices==-1) orderVertices=9999;
 			if(orderNormals==-1) orderNormals=9999;
@@ -891,7 +891,7 @@ void ofMesh::load(string path){
 			int numV;
 			sline >> numV;
 			if(numV!=3){
-				error = "face not a triangle";
+				error = "Face is not a triangle. Face has " + ofToString(numV) + " vertices, expecting 3.";
 				goto clean;
 			}
 			int i;
@@ -917,8 +917,7 @@ void ofMesh::load(string path){
 
 	return;
 	clean:
-	ofLogError() << lineNum << ":" << error;
-	ofLogError() << "\"" << line << "\"";
+	ofLogError("ofMesh") << "Error in loadMesh(): " << error << " While parsing line " << lineNum << ": \"" << line << "\"";
 	data = backup;
 }
 

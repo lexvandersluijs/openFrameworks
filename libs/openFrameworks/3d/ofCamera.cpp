@@ -1,15 +1,4 @@
-/*
- *  ofCamera.cpp
- *  openFrameworksLib
- *
- *  Created by Memo Akten on 10/01/2011.
- *  Copyright 2011 MSA Visuals Ltd. All rights reserved.
- *
- */
-
 #include "ofCamera.h"
-#include "ofLog.h"
-
 
 ofCamera::ofCamera() :
 isOrtho(false),

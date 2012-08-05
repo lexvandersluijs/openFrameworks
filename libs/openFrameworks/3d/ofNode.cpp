@@ -1,7 +1,5 @@
-
 #include "ofNode.h"
 #include "ofMath.h"
-#include "ofLog.h"
 
 ofNode::ofNode() : 
 	parent(NULL) {
