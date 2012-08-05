@@ -249,35 +249,39 @@ void ofCairoRenderer::draw(ofMesh & primitive, bool useColors, bool useTextures,
 	if(primitive.getNumVertices() == 0){
 		return;
 	}
-	if(primitive.getNumIndices() == 0){
-		ofMesh indexedMesh = primitive;
-		indexedMesh.setupIndicesAuto();
-		draw(indexedMesh, useColors, useTextures, useNormals);
-		return;
+	
+	ofMesh* meshPtr;
+	ofMesh indexed;
+	if(primitive.getNumIndices() > 0){
+		meshPtr = &primitive;
+	} else {
+		indexed = primitive;
+		indexed.setupIndicesAuto();
+		meshPtr = &indexed;
 	}
+	ofMesh& mesh = *meshPtr;
 	
 	pushMatrix();
 	cairo_matrix_init_identity(getCairoMatrix());
 	cairo_new_path(cr);
-
-		int i = 1;
-		ofVec3f v = transform(primitive.getVertex(primitive.getIndex(0)));
-		ofVec3f v2;
-		cairo_move_to(cr,v.x,v.y);
-		if(primitive.getMode()==OF_PRIMITIVE_TRIANGLE_STRIP){
-			v = transform(primitive.getVertex(primitive.getIndex(1)));
-			cairo_line_to(cr,v.x,v.y);
-			v = transform(primitive.getVertex(primitive.getIndex(2)));
-			cairo_line_to(cr,v.x,v.y);
-			i=2;
-		}
-		for(; i<primitive.getNumIndices(); i++){
-			v = transform(primitive.getVertex(primitive.getIndex(i)));
-			switch(primitive.getMode()){
+	int i = 1;
+	ofVec3f v = transform(mesh.getVertex(mesh.getIndex(0)));
+	ofVec3f v2;
+	cairo_move_to(cr,v.x,v.y);
+	if(mesh.getMode()==OF_PRIMITIVE_TRIANGLE_STRIP){
+		v = transform(mesh.getVertex(mesh.getIndex(1)));
+		cairo_line_to(cr,v.x,v.y);
+		v = transform(mesh.getVertex(mesh.getIndex(2)));
+		cairo_line_to(cr,v.x,v.y);
+		i=2;
+	}
+	for(; i<mesh.getNumIndices(); i++){
+		v = transform(mesh.getVertex(mesh.getIndex(i)));
+		switch(mesh.getMode()){
 			case(OF_PRIMITIVE_TRIANGLES):
 				if((i+1)%3==0){
 					cairo_line_to(cr,v.x,v.y);
-					v2 = transform(primitive.getVertex(primitive.getIndex(i-2)));
+					v2 = transform(mesh.getVertex(mesh.getIndex(i-2)));
 					cairo_line_to(cr,v2.x,v2.y);
 					cairo_move_to(cr,v.x,v.y);
 				}else if((i+3)%3==0){
@@ -285,33 +289,32 @@ void ofCairoRenderer::draw(ofMesh & primitive, bool useColors, bool useTextures,
 				}else{
 					cairo_line_to(cr,v.x,v.y);
 				}
-
-			break;
+				
+				break;
 			case(OF_PRIMITIVE_TRIANGLE_STRIP):
-					v2 = transform(primitive.getVertex(primitive.getIndex(i-2)));
-					cairo_line_to(cr,v.x,v.y);
-					cairo_line_to(cr,v2.x,v2.y);
-					cairo_move_to(cr,v.x,v.y);
-			break;
+				v2 = transform(mesh.getVertex(mesh.getIndex(i-2)));
+				cairo_line_to(cr,v.x,v.y);
+				cairo_line_to(cr,v2.x,v2.y);
+				cairo_move_to(cr,v.x,v.y);
+				break;
 			case(OF_PRIMITIVE_TRIANGLE_FAN):
-					/*triangles.addIndex((GLuint)0);
-						triangles.addIndex((GLuint)1);
-						triangles.addIndex((GLuint)2);
-						for(int i = 2; i < primitive.getNumVertices()-1;i++){
-							triangles.addIndex((GLuint)0);
-							triangles.addIndex((GLuint)i);
-							triangles.addIndex((GLuint)i+1);
-						}*/
-			break;
+				/*triangles.addIndex((GLuint)0);
+				 triangles.addIndex((GLuint)1);
+				 triangles.addIndex((GLuint)2);
+				 for(int i = 2; i < primitive.getNumVertices()-1;i++){
+				 triangles.addIndex((GLuint)0);
+				 triangles.addIndex((GLuint)i);
+				 triangles.addIndex((GLuint)i+1);
+				 }*/
+				break;
 			default:break;
-			}
 		}
-
-	cairo_move_to(cr,primitive.getVertex(primitive.getIndex(primitive.getNumIndices()-1)).x,primitive.getVertex(primitive.getIndex(primitive.getNumIndices()-1)).y);
-
+	}
+	
+	cairo_move_to(cr,mesh.getVertex(mesh.getIndex(mesh.getNumIndices()-1)).x,mesh.getVertex(mesh.getIndex(mesh.getNumIndices()-1)).y);
+	
 	if(ofGetStyle().lineWidth>0){
-
-		cairo_stroke( cr );
+		cairo_stroke(cr);
 	}
 	popMatrix();
 }
