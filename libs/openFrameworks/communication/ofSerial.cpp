@@ -454,7 +454,7 @@ int ofSerial::writeBytes(unsigned char * buffer, int length){
 		if(numWritten <= 0){
 			if ( errno == EAGAIN )
 				return 0;
-			ofLogError("ofSerial") << "Cannot write to serial port: " << strerror(errno) << " (error number " << errno ")";
+			ofLogError("ofSerial") << "Cannot write to serial port: " << strerror(errno) << " (error number " << errno << ")";
 			return OF_SERIAL_ERROR;
 		}
 
@@ -494,7 +494,7 @@ int ofSerial::readBytes(unsigned char * buffer, int length){
 		if(nRead < 0){
 			if ( errno == EAGAIN )
 				return OF_SERIAL_NO_DATA;
-			ofLogError("ofSerial") << "Cannot read from serial port: " << strerror(errno) << " (error number " << errno ")";
+			ofLogError("ofSerial") << "Cannot read from serial port: " << strerror(errno) << " (error number " << errno << ")";
 			return OF_SERIAL_ERROR;
 		}
 		return nRead;
@@ -532,7 +532,7 @@ bool ofSerial::writeByte(unsigned char singleByte){
 		if(numWritten <= 0 ){
 			if ( errno == EAGAIN )
 				return 0;
-			ofLogError("ofSerial") << "Cannot write to serial port: " << strerror(errno) << " (error number " << errno ")";
+			ofLogError("ofSerial") << "Cannot write to serial port: " << strerror(errno) << " (error number " << errno << ")";
 			 return OF_SERIAL_ERROR;
 		}
 		ofLogVerbose("ofSerial") << "Wrote 1 byte to the serial port.";
@@ -574,7 +574,7 @@ int ofSerial::readByte(){
 		if(nRead < 0){
 			if ( errno == EAGAIN )
 				return OF_SERIAL_NO_DATA;
-			ofLogError("ofSerial") << "Cannot read from serial port: " << strerror(errno) << " (error number " << errno ")";
+			ofLogError("ofSerial") << "Cannot read from serial port: " << strerror(errno) << " (error number " << errno << ")";
             return OF_SERIAL_ERROR;
 		}
 		if(nRead == 0)
