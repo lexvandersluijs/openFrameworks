@@ -389,8 +389,8 @@ bool ofArduino::isInitialized(){
 
 void ofArduino::processData(unsigned char inputData){
 
-	char msg[100];
-	sprintf(msg, "Received Byte: %i", inputData);
+	//char msg[100];
+	//sprintf(msg, "Received Byte: %i", inputData);
 	//Logger::get("Application").information(msg);
 
 	// we have command data
