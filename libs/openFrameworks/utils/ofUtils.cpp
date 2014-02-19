@@ -282,9 +282,13 @@ string ofToDataPath(string path, bool makeAbsolute){
 #ifdef TARGET_WIN32
 	if (defaultWorkingDirectory().toString() != getWorkingDir().toString()) {
 		// change our cwd back to where it was on app load
-		int ret = chdir(defaultWorkingDirectory().toString().c_str());
+		string defWorkDir = defaultWorkingDirectory().toString();
+		if(defWorkDir == "")
+			defWorkDir = ".";
+
+		int ret = chdir(defWorkDir.c_str());
 		if(ret==-1){
-			ofLogWarning("ofUtils") << "ofToDataPath: error while trying to change back to default working directory " << defaultWorkingDirectory().toString();
+			ofLogWarning("ofUtils") << "ofToDataPath: error while trying to change back to default working directory " << defWorkDir;
 		}
 	}
 #endif
