@@ -119,7 +119,7 @@ void ofBeginSaveScreenAsPDF(string filename, bool bMultipage, bool b3D, ofRectan
 	rendererCollection->renderers.push_back(ofGetGLRenderer());
 	rendererCollection->renderers.push_back(cairoScreenshot);
 	
-	ofSetCurrentRenderer(rendererCollection,true);
+	ofSetCurrentRenderer(cairoScreenshot, true);
 	bScreenShotStarted = true;
 }
 
@@ -275,6 +275,23 @@ void ofPushMatrix(){
 //----------------------------------------------------------
 void ofPopMatrix(){
 	renderer->popMatrix();
+}
+
+//----------------------------------------------------------
+/** @brief	Queries the current OpenGL matrix state
+ *  @detail Returns the specified matrix as held by the renderer's current matrix stack.
+ *
+ *			You can query one of the following:
+ *
+ *			[OF_MATRIX_MODELVIEW | OF_MATRIX_PROJECTION | OF_MATRIX_TEXTURE]
+ *
+ *			Each query will return the state of the matrix
+ *			as it was uploaded to the shader currently bound.
+ *
+ *	@param	matrixMode_  Which matrix mode to query
+ */
+ofMatrix4x4 ofGetCurrentMatrix(ofMatrixMode matrixMode_){
+	return renderer->getCurrentMatrix(matrixMode_);
 }
 
 //----------------------------------------------------------
@@ -573,6 +590,7 @@ void ofSetCurveResolution(int res){
 void ofSetCircleResolution(int res){
 	renderer->setCircleResolution(res);
 	currentStyle.circleResolution = res;
+	shape.setCircleResolution(res);
 }
 
 //----------------------------------------------------------

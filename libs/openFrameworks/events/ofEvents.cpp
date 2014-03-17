@@ -150,7 +150,10 @@ void ofNotifyUpdate(){
 			oneSec  = timeNow;
 			nFramesForFPS = 0;
 		}else{
-			fps = fps*.99 + nFramesForFPS/(oneSecDiff*MICROS_TO_SEC)*.01;
+			double deltaTime = ((double)oneSecDiff)*MICROS_TO_SEC;
+			if( deltaTime > 0.0 ){
+				fps = fps*0.99 + (nFramesForFPS/deltaTime)*0.01;
+			}
 		}
 		nFramesForFPS++;
 
@@ -299,6 +302,7 @@ void ofNotifyMousePressed(int x, int y, int button){
 	mouseEventArgs.x = x;
 	mouseEventArgs.y = y;
 	mouseEventArgs.button = button;
+    mouseEventArgs.type = ofMouseEventArgs::Pressed;
 	ofNotifyEvent( ofEvents().mousePressed, mouseEventArgs );
 }
 
@@ -322,6 +326,7 @@ void ofNotifyMouseReleased(int x, int y, int button){
 	mouseEventArgs.x = x;
 	mouseEventArgs.y = y;
 	mouseEventArgs.button = button;
+    mouseEventArgs.type = ofMouseEventArgs::Released;
 	ofNotifyEvent( ofEvents().mouseReleased, mouseEventArgs );
 }
 
@@ -344,6 +349,7 @@ void ofNotifyMouseDragged(int x, int y, int button){
 	mouseEventArgs.x = x;
 	mouseEventArgs.y = y;
 	mouseEventArgs.button = button;
+    mouseEventArgs.type = ofMouseEventArgs::Dragged;
 	ofNotifyEvent( ofEvents().mouseDragged, mouseEventArgs );
 }
 
@@ -364,6 +370,7 @@ void ofNotifyMouseMoved(int x, int y){
 
 	mouseEventArgs.x = x;
 	mouseEventArgs.y = y;
+    mouseEventArgs.type = ofMouseEventArgs::Moved;
 	ofNotifyEvent( ofEvents().mouseMoved, mouseEventArgs );
 }
 

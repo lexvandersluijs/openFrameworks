@@ -7,7 +7,7 @@ version=$2
 
 REPO=https://github.com/openframeworks/openFrameworks
 REPO_ALIAS=upstreamhttps
-BRANCH=develop
+BRANCH=master
 
 PG_REPO=https://github.com/ofZach/projectGeneratorSimple.git
 PG_REPO_ALIAS=originhttps
@@ -259,7 +259,7 @@ function createPackage {
 	fi
     if [ "$pkg_platform" = "vs" ]; then
 		rm projectGenerator_winvs.zip
-		wget http://ci.arturocastro.net/deliver/OF/projectGeneratorSimple_v02/projectGenerator_winvs.zip
+		wget http://www.openframeworks.cc/pgSimple/projectGenerator_winvs.zip
 		unzip projectGenerator_winvs.zip
 		rm projectGenerator_winvs.zip
 		rm -Rf __MACOSX
