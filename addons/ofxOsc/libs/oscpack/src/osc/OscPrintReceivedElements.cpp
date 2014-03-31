@@ -34,6 +34,7 @@
 #include <ctime>
 #include <cstring>
 
+#pragma warning(disable : 4996) // LS: don't fail compilation on usage of ctime
 
 namespace osc{
 
@@ -118,7 +119,7 @@ std::ostream& operator<<( std::ostream & os,
                 const char *timeString = std::ctime( &t );
                 size_t len = strlen( timeString );
                 char *s = new char[ len + 1 ];
-                strcpy( s, timeString );
+                strcpy_s( s, len + 1, timeString );
                 if( len )
                     s[ len - 1 ] = '\0';
                     

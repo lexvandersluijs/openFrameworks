@@ -336,7 +336,11 @@ OutboundPacketStream& OutboundPacketStream::operator<<( const BeginMessage& rhs 
 
     messageCursor_ = BeginElement( messageCursor_ );
 
-    strcpy( messageCursor_, rhs.addressPattern );
+	// LS: I don't known if there is any guarantee that Capacity() bytes will fit in the buffer starting with messageCursor_ !
+	// but at least the code compiles on VS 2012 now.. And a difference is computed inside the Capacity() function that 
+	// seems to do what we need. In any event, it cannot be any more unsafe than using plain 'strcpy'.
+	strcpy_s( messageCursor_, Capacity(), rhs.addressPattern ); 
+
     unsigned long rhsLength = strlen(rhs.addressPattern);
     messageCursor_ += rhsLength + 1;
 
@@ -578,7 +582,7 @@ OutboundPacketStream& OutboundPacketStream::operator<<( const char *rhs )
     CheckForAvailableArgumentSpace( RoundUp4(strlen(rhs) + 1) );
 
     *(--typeTagsCurrent_) = STRING_TYPE_TAG;
-    strcpy( argumentCurrent_, rhs );
+    strcpy_s( argumentCurrent_, Capacity(), rhs );
     unsigned long rhsLength = strlen(rhs);
     argumentCurrent_ += rhsLength + 1;
 
@@ -598,7 +602,7 @@ OutboundPacketStream& OutboundPacketStream::operator<<( const Symbol& rhs )
     CheckForAvailableArgumentSpace( RoundUp4(strlen(rhs) + 1) );
 
     *(--typeTagsCurrent_) = SYMBOL_TYPE_TAG;
-    strcpy( argumentCurrent_, rhs );
+    strcpy_s( argumentCurrent_, Capacity(), rhs );
     unsigned long rhsLength = strlen(rhs);
     argumentCurrent_ += rhsLength + 1;
 
